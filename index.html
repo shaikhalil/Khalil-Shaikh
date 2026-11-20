@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" >
+<meta name="viewport" content="width=device-width, initial-scale=1.0" >
+<title>Khalil Shaikh® — Fresher Web Developer · Python · Flask</title>
+<meta name="description" content="Khalil Shaikh® — a curious fresher from Ahmednagar, India. HTML, CSS, Python, Flask, Linux & GitHub. Open to internships and collabs." >
+<link rel="preconnect" href="https://fonts.googleapis.com" >
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin >
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" >
+
+
+<style>
+
+:root{
+  --paper:#f1ead8;
+  --ink:#17150f;
+  --accent:#d9731f;
+  --line:#d9d0b8;
+  --tile:#e6dec7;
+  --grey:#b5ab8d;
+  --band:#14130d;
+  --navy:#1e3677;
+  --mint:#a8a45a;
+  --green:#d9731f;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Archivo',system-ui,-apple-system,'Segoe UI',sans-serif;
+  font-size:16px;line-height:1.5;
+  background:var(--paper);
+  color:var(--ink);
+  overflow-x:hidden;
+}
+::selection{background:var(--accent);color:#fff}
+img,svg{display:block}
+section{position:relative}
+section[id]{scroll-margin-top:70px}
+a{color:inherit;text-decoration:none}
+.mono{font-family:'JetBrains Mono',ui-monospace,monospace}
+sup{font-size:.34em;vertical-align:.9em;letter-spacing:0}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0}
+a:focus-visible,summary:focus-visible{outline:2px solid currentColor;outline-offset:4px}
+
+
+
+#progress{display:none;position:fixed;top:0;left:0;height:3px;width:100%;z-index:300;background:linear-gradient(90deg,#a8a45a,var(--mint),var(--green));transform:scaleX(0);transform-origin:left}
+@keyframes scroll-progress{to{transform:scaleX(1)}}
+@supports (animation-timeline:scroll(root block)){
+  #progress{display:block;animation:scroll-progress 1s linear both;animation-timeline:scroll(root block)}
+}
+
+
+:where(.reveal,.hero .kicker,.strip,.gallery,.gcard,.chips>li,.hero-actions>.btn-line,.tile>*,.scard>h3,.scard>p,.trackrow>*,.pcard>*,.foot-links,.foot-links>*){
+  opacity:1;transform:none;
+  animation:reveal-in 1s cubic-bezier(.2,.7,.2,1) var(--fade-delay,var(--d,0s)) both;
+}
+@keyframes reveal-in{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+:is(.chips>li,.gcard,.tile>*,.pcard>*,.foot-links>*):nth-child(2){--fade-delay:.12s;--fade-end:75%}
+:is(.chips>li,.gcard,.tile>*,.pcard>*,.foot-links>*):nth-child(3){--fade-delay:.24s;--fade-end:85%}
+:is(.gcard,.pcard>*):nth-child(n+4){--fade-delay:.36s;--fade-end:95%}
+
+@keyframes navigation-fade{from{opacity:0}to{opacity:1}}
+.topbar>.brand,.links>a,.bar-right>*{animation:navigation-fade .8s ease .1s both}
+.links>a:nth-child(2){animation-delay:.15s}
+.links>a:nth-child(3){animation-delay:.2s}
+.links>a:nth-child(4){animation-delay:.25s}
+.links>a:nth-child(5){animation-delay:.3s}
+
+@supports (animation-timeline:view()) and (animation-range:entry 0% entry 65%){
+  :where(.reveal,.strip,.gallery,.gcard,.tile>*,.scard>h3,.scard>p,.trackrow>*,.pcard>*,.foot-links,.foot-links>*){
+    animation:reveal-in 1s linear both;
+    animation-timeline:view();animation-range:entry 0% entry var(--fade-end,65%);
+  }
+  
+  .gallery{view-timeline-name:--gallery-fade;view-timeline-axis:block}
+  .gallery .gcard{animation-timeline:--gallery-fade}
+  .band{view-timeline-name:--footer-fade;view-timeline-axis:block}
+  .band .reveal{animation-timeline:--footer-fade}
+}
+
+.hero .reveal{animation:reveal-in 1s cubic-bezier(.2,.7,.2,1) var(--d,0s) both}
+.hero .hero-copy{animation-delay:.3s}
+.hero .chips>li,.hero-actions>.btn-line{animation-delay:calc(.45s + var(--fade-delay,0s))}
+
+
+.topbar{
+  position:sticky;top:0;z-index:200;height:64px;
+  background:linear-gradient(90deg,#7d8c3e 0%,#66752f 48%,#546128 100%);
+  color:#fff;
+  display:flex;align-items:center;gap:22px;
+  padding:0 4vw;
+}
+.topbar::after{content:"";position:absolute;left:0;bottom:-4px;width:100%;height:4px;background:#000;opacity:.08}
+.brand{font-weight:800;font-size:18px;letter-spacing:.01em;white-space:nowrap}
+.brand sup{font-weight:500}
+.links{flex:1;display:flex;justify-content:space-evenly;align-items:center;gap:10px}
+.links a,.mobile-links a{
+  font-size:14px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
+  color:rgba(255,255,255,.82);padding:8px 2px;position:relative;
+  transition:color .2s;
+}
+.links a::after,.mobile-links a::after{content:"";position:absolute;left:0;bottom:2px;height:2px;width:0;background:#fbf7ea;transition:width .25s}
+.links a:hover,.mobile-links a:hover{color:#fff}
+.links a:hover::after,.mobile-links a:hover::after{width:100%}
+.bar-right{display:flex;align-items:center;gap:16px;margin-left:auto}
+.timezone{font-size:12px;color:rgba(255,255,255,.9);letter-spacing:.03em;white-space:nowrap}
+.hire{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.mobile-menu{display:none}
+.menu-btn{list-style:none;cursor:pointer}
+.menu-btn::-webkit-details-marker{display:none}
+.close-label,.mobile-menu[open] .menu-label{display:none}
+.mobile-menu[open] .close-label{display:inline}
+.sq{
+  display:grid;place-items:center;width:24px;height:24px;
+  background:#000;color:#fff;font-size:14px;flex:none;
+  transition:transform .25s;
+}
+a:hover .sq{transform:translate(2px,-2px)}
+
+
+.kicker{
+  display:flex;align-items:center;gap:10px;
+  font-size:13px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#625c45;
+  line-height:1.7;
+  margin-bottom:18px;
+}
+.kicker .bar,.btn-line .bar{width:4px;height:15px;background:var(--accent);flex:none}
+.mega{
+  font-weight:900;text-transform:uppercase;
+  font-size:clamp(56px,12.5vw,196px);
+  line-height:.86;letter-spacing:-.03em;
+  color:var(--ink);
+}
+.mega sup{font-size:.32em;vertical-align:1.35em}
+.split span{color:var(--grey)}
+.split{font-size:clamp(46px,8.5vw,132px);line-height:.9}
+
+
+.hero{
+  padding:clamp(48px,7vw,96px) 4vw 80px;
+  background:
+    radial-gradient(46% 42% at 82% 8%,rgba(168,164,90,.16),transparent 70%),
+    radial-gradient(40% 36% at 6% 62%,rgba(217,115,31,.12),transparent 70%);
+}
+
+.hero-stage{
+  display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);
+  gap:clamp(32px,6vw,88px);align-items:center;max-width:1280px;margin-inline:auto;
+}
+.hero-content{min-width:0}
+.hero .kicker{margin-bottom:24px}
+.hero .mega{position:relative;z-index:1;margin:0;font-size:clamp(72px,8.2vw,116px);line-height:.9;letter-spacing:-.055em}
+.hero .mega span{display:block}
+.hero .mega .l2{text-align:left}
+.hero .mega sup{font-size:.2em;vertical-align:2.4em;letter-spacing:0;margin-left:4px}
+.hero-role{font-size:clamp(18px,1.8vw,23px);font-weight:700;letter-spacing:-.02em;margin:22px 0 18px}
+.hero-role span{color:#66752f}
+.hero-photo{
+  position:relative;z-index:1;isolation:isolate;
+  justify-self:end;width:min(440px,100%);
+}
+.hero-photo::before{
+  content:"";position:absolute;z-index:-1;inset:18px 12px 74px -12px;
+  border:1px solid #a8ae85;border-radius:240px 240px 28px 28px;transform:rotate(-4deg);
+}
+.portrait-frame{
+  position:relative;aspect-ratio:4/5;overflow:hidden;
+  border:1px solid #b7bf98;border-radius:240px 240px 24px 24px;
+  background:radial-gradient(circle at 50% 32%,#f7f3df 0%,#e0e5c4 42%,#b1bc88 100%);
+  box-shadow:0 24px 50px rgba(68,75,39,.13);
+}
+.portrait-frame::before{
+  content:"";position:absolute;inset:24px 22px;
+  border:1px solid rgba(255,255,255,.7);border-radius:220px 220px 18px 18px;
+}
+.hero-photo img{
+  position:absolute;bottom:0;left:0;width:100%;height:94%;
+  object-fit:contain;object-position:center bottom;
+  filter:drop-shadow(0 12px 18px rgba(39,48,24,.16));
+}
+.portrait-status{
+  position:absolute;z-index:2;top:32px;right:0;
+  display:flex;align-items:center;gap:8px;padding:10px 14px;
+  border:1px solid #c6cfad;border-radius:100px;background:#fbf9ed;
+  color:#425226;font-size:12px;font-weight:700;letter-spacing:.04em;
+  box-shadow:0 8px 20px rgba(68,75,39,.08);
+}
+.portrait-status::before{content:"";width:8px;height:8px;border-radius:50%;background:#66752f;flex:none}
+.hero-photo figcaption{
+  display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;
+  margin:18px 4px 0;color:#625c45;font-size:13px;letter-spacing:.02em;text-align:left;
+}
+.hero-photo figcaption strong{font-family:'Archivo',system-ui,sans-serif;font-size:17px;font-weight:700;color:var(--ink)}
+.hero-copy{max-width:580px}
+.intro{font-size:clamp(18px,1.6vw,21px);line-height:1.75;color:#403b2b}
+.intro b{color:var(--ink)}
+.type-wrap{font-size:.95em;color:#a44d0c;font-weight:700}
+.type-words{display:inline-grid;width:15ch;vertical-align:bottom}
+.type-word{
+  grid-area:1/1;box-sizing:content-box;width:0;overflow:hidden;white-space:nowrap;
+  visibility:hidden;border-right:2px solid var(--accent);
+  animation:type-cycle 20s steps(var(--chars)) var(--start) infinite,caret-blink 1s steps(1) infinite;
+}
+@keyframes type-cycle{
+  0%{visibility:visible;width:0}
+  5%,14%{visibility:visible;width:calc(var(--chars) * 1ch)}
+  19%{visibility:visible;width:0}
+  20%,100%{visibility:hidden;width:0}
+}
+@keyframes caret-blink{50%{border-color:transparent}}
+.chips{list-style:none;display:flex;flex-wrap:wrap;gap:8px;margin:24px 0 28px}
+.chips li{
+  font-size:12px;letter-spacing:.05em;color:#5e5740;
+  border:1px solid var(--line);background:#fbf7ea;
+  padding:8px 12px;border-radius:6px;
+}
+.btn-line{
+  display:flex;align-items:center;gap:10px;width:fit-content;
+  background:#fbf7ea;border:1px solid var(--line);
+  padding:12px 16px;border-radius:8px;min-height:48px;
+  font-size:14px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;
+  transition:border-color .2s,translate .25s;
+}
+.btn-line:hover{border-color:var(--ink);translate:2px 0}
+.btn-line .sq{background:linear-gradient(135deg,#66752f,#546128)}
+.hero-actions{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.hero-actions .btn-line:first-child{background:#546128;border-color:#546128;color:#fff}
+.hero-actions .btn-line:first-child:hover{background:#425020}
+.hero-actions .btn-line:first-child .sq{background:rgba(255,255,255,.14)}
+.social-links{display:flex;flex-wrap:wrap;align-items:center;gap:12px}
+.hero-socials{margin-top:28px;padding-top:22px;border-top:1px solid var(--line)}
+.social-label{font-size:12px;font-weight:600;letter-spacing:.06em;color:#625c45;margin-right:4px}
+.social-icon{
+  display:grid;place-items:center;width:48px;height:48px;
+  border:1px solid var(--line);border-radius:50%;background:#fbf7ea;color:#546128;
+  transition:color .2s,background .2s,border-color .2s,translate .2s;
+}
+.social-icon:hover{color:#fff;background:#546128;border-color:#546128;translate:0 -3px}
+.social-icon svg,.social-text svg{width:22px;height:22px;flex:none}
+.social-text{display:inline-flex;align-items:center;gap:8px;min-height:44px}
+
+
+.strip{background:linear-gradient(90deg,#7d8c3e,#66752f 50%,#546128);overflow:hidden;padding:13px 0;border-block:4px solid var(--ink)}
+.strack{display:flex;width:max-content;animation:scroll 26s linear infinite}
+.sgrp{display:flex;align-items:center;gap:34px;padding-right:34px}
+.sgrp span{
+  color:#fff;font-weight:800;font-size:17px;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;
+}
+.spark{width:22px;height:22px;fill:#fff;flex:none}
+.spark.sm{width:14px;height:14px}
+.spark.r{transform:rotate(45deg)}
+@keyframes scroll{to{transform:translateX(calc(-100%/2))}}
+.strip:hover .strack{animation-play-state:paused}
+
+
+.about{padding:110px 4vw 90px}
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:44px;margin-top:56px;align-items:start}
+.lede{font-size:clamp(17px,2vw,24px);line-height:1.65;color:#38342a;max-width:560px}
+.lede b{color:var(--ink);font-weight:800}
+
+
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.tile{
+  background:var(--tile);min-height:148px;padding:22px;
+  display:flex;flex-direction:column;justify-content:space-between;gap:14px;
+  transition:background .25s, translate .3s;
+}
+.tile:hover{background:#dbd2b8;translate:0 -3px}
+.tlabel{font-size:12px;letter-spacing:.08em;color:#625c45;text-transform:uppercase}
+.tval{font-size:18px;font-weight:800;letter-spacing:.01em;line-height:1.45;text-transform:uppercase;overflow-wrap:anywhere}
+.tval.email{text-transform:none}
+.tlink{position:relative}
+.tlink:hover{color:var(--accent)}
+
+
+.gallery{overflow:hidden;border-block:1px solid var(--line);padding:26px 0 34px}
+.gcards{display:flex;width:max-content;animation:scroll 42s linear infinite}
+.gallery:hover .gcards{animation-play-state:paused}
+.grp{display:flex;gap:22px;padding:0 22px}
+.gcard{background:var(--ink);padding:8px 8px 12px;flex:none;width:min(240px,60vw);
+  transition:translate .3s}
+.gcard:hover{translate:0 -6px}
+.gcover{
+  width:100%;aspect-ratio:4/5;display:grid;place-content:center;gap:12px;text-align:center;
+  filter:grayscale(.25);transition:filter .35s;
+}
+.gcard:hover .gcover{filter:grayscale(0)}
+.gcard:nth-child(odd) .gcover{transform:rotate(-1deg)}
+.gcard:nth-child(even) .gcover{transform:rotate(1.2deg)}
+.gcover em,.poster em{font-style:italic}
+.gcover code{font-family:'JetBrains Mono',monospace;font-size:12px;color:inherit;overflow-wrap:anywhere}
+.gcover .em{font-size:44px;filter:drop-shadow(0 6px 8px rgba(0,0,0,.35))}
+figcaption{color:#d6cfb4;font-size:12px;letter-spacing:.05em;margin-top:9px;text-align:center}
+.gc1{background:repeating-linear-gradient(135deg,#f6f0de 0 14px,#ebe3cb 14px 28px);color:#4a4a2a}
+.gc2{background:radial-gradient(130% 120% at 50% 0%,#2c4357,#101b28 75%);color:#fded9b}
+.gc2 code{color:#8fb3d9}
+.gc3{background:linear-gradient(170deg,#15130d,#000);color:#fff}
+.gc3 code{color:#7be0c3}
+.gc4{background:linear-gradient(180deg,#fff,#e6eae7);color:#4a4a2a}
+.gc4 code{color:var(--accent)}
+.gc5{background:linear-gradient(180deg,#1a1710,#0d0c08);color:#e8f3ed}
+.gc5 code{color:#7ee2a8}
+.gc6{background:linear-gradient(160deg,#ff8a5c,#e24329 78%);color:#fff}
+.gc7{background:linear-gradient(165deg,#c9c58a,#66752f);color:#fff}
+
+
+.skills{padding:110px 4vw 60px;text-align:center}
+.skills .kicker{justify-content:center}
+.split{margin-bottom:64px}
+.scards{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:18px;
+  max-width:1200px;margin-inline:auto;text-align:left;
+}
+.scard{
+  background:var(--navy);color:#fff;padding:26px 22px 30px;min-height:300px;
+  display:flex;flex-direction:column;gap:16px;
+  transition:translate .35s cubic-bezier(.2,.7,.2,1),box-shadow .35s;
+}
+.scard:nth-child(2),.scard:nth-child(4){margin-top:44px}
+.scard:hover{translate:0 -8px;box-shadow:0 30px 46px rgba(40,35,15,.22)}
+.scard:hover .spark{transform:rotate(90deg)}
+.scard:hover:nth-child(odd) .spark.r,.scard:hover:nth-child(even) .spark{transform:rotate(-90deg)}
+.scard .spark{width:26px;height:26px;fill:var(--accent);transition:transform .45s cubic-bezier(.2,.7,.2,1)}
+.scard h3{font-size:20px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;line-height:1.3;margin-top:6px}
+.scard p{font-size:16px;color:#d4dcf0;line-height:1.7;margin-top:auto}
+
+
+.tracks{padding:40px 4vw 110px;max-width:1250px;margin-inline:auto}
+.trackrow{
+  display:grid;grid-template-columns:1fr 1fr 160px;gap:30px;align-items:center;
+  border-top:1px solid var(--line);
+  padding:44px 8px;position:relative;
+  transition:background .25s,padding-left .3s;
+}
+.trackrow:last-child{border-bottom:1px solid var(--line)}
+.trackrow:hover{background:#fbf7ea;padding-left:20px}
+.idx{display:flex;align-items:center;gap:8px;font-size:13px;letter-spacing:.1em;color:#a44d0c;font-weight:700}
+.idx .spark{fill:var(--accent)}
+.tr-left h3{
+  font-size:clamp(26px,3.6vw,52px);font-weight:900;text-transform:uppercase;
+  letter-spacing:-.02em;color:var(--accent);line-height:1;margin-top:10px;
+}
+.tr-right p{font-size:16px;line-height:1.75;color:#524c3a;max-width:380px}
+.tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.tags span{font-size:12px;letter-spacing:.05em;color:#625c45;border:1px solid var(--line);padding:6px 10px;background:#fbf7ea}
+.go{display:flex;align-items:center;gap:8px;font-size:13px;letter-spacing:.06em;font-weight:700;justify-self:end;color:#5e5740;transition:color .2s}
+.go span{display:grid;place-items:center;width:26px;height:26px;background:var(--accent);color:#fff;font-size:14px;transition:transform .25s}
+.trackrow:hover .go{color:var(--ink)}
+.trackrow:hover .go span{transform:translate(2px,-2px)}
+
+
+.projects{padding:110px 4vw;background:var(--paper)}
+.mega-cut{
+  font-weight:900;font-size:clamp(52px,8.6vw,132px);
+  line-height:.86;letter-spacing:-.03em;text-transform:uppercase;
+  color:var(--ink);
+}
+.mega-cut span{color:var(--grey)}
+.pgrid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:56px}
+.pcard{
+  background:#fbf7ea;border:1px solid var(--line);padding:28px 28px 26px;
+  display:flex;flex-direction:column;gap:16px;
+  transition:border-color .25s,translate .3s,box-shadow .3s;
+}
+.pcard:hover{border-color:var(--ink);translate:0 -5px;box-shadow:0 22px 36px rgba(40,35,15,.12)}
+.pwide{grid-column:1/-1}
+.ptop{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.pill-s{font-size:12px;letter-spacing:.06em;color:#5e5740;border:1px solid var(--line);padding:5px 10px}
+.pcard h3{font-size:clamp(22px,2.6vw,36px);font-weight:900;text-transform:uppercase;letter-spacing:-.02em;line-height:1;color:var(--ink)}
+.pcard p{font-size:16px;line-height:1.75;color:#524c3a;max-width:560px}
+.pcard .tags{margin-top:0}
+.pcard .go{justify-self:auto;margin-top:auto;padding-top:6px}
+.pcard:hover .go{color:var(--ink)}
+.pcard:hover .go span{transform:translate(2px,-2px)}
+
+
+.contact{padding:110px 4vw 120px}
+.contact .split{margin-bottom:46px}
+.c-tiles{max-width:900px;margin-top:56px}
+.c-tiles .tval a{color:inherit}
+
+
+.foot{background:var(--band);color:#fff}
+.band{padding:80px 4vw 30px;text-align:center;position:relative;overflow:hidden}
+.band .pill{
+  display:inline-flex;align-items:center;gap:8px;
+  color:#fff;border:1px solid rgba(255,255,255,.25);
+  font-size:12px;letter-spacing:.08em;padding:8px 16px;margin-bottom:34px;
+}
+.band .pill::before{content:"";width:6px;height:6px;background:var(--accent);border-radius:50%}
+.foot-name{
+  font-weight:900;text-transform:uppercase;
+  font-size:min(10.4vw,196px);letter-spacing:-.03em;line-height:.9;white-space:nowrap;
+}
+.foot-links{
+  display:flex;flex-wrap:wrap;gap:18px;align-items:center;justify-content:space-between;
+  padding:26px 4vw;border-top:1px solid rgba(255,255,255,.14);
+  font-size:12px;letter-spacing:.06em;color:#c9c2ab;
+}
+.flinks{display:flex;flex-wrap:wrap;gap:12px 18px}
+.flinks a{color:#b8b094;transition:color .2s}
+.flinks a:hover{color:var(--accent)}
+.fnote{font-size:12px}
+
+
+@media (max-width:980px){
+  .links{display:none}
+  .mobile-menu{display:block}
+  .scards{grid-template-columns:1fr 1fr}
+  .scard:nth-child(3){margin-top:0}
+  .trackrow{grid-template-columns:1fr;gap:18px}
+  .go{justify-self:start}
+  .pgrid{grid-template-columns:1fr}
+  .about-grid{grid-template-columns:1fr}
+  .mobile-links{
+    position:absolute;top:64px;left:0;right:0;
+    background:var(--ink);flex-direction:column;align-items:stretch;gap:0;
+    display:flex;padding:10px 0;z-index:199;
+  }
+  .mobile-links a{padding:14px 6vw;color:#fff}
+  .menu-btn{display:grid;place-items:center;min-height:44px;min-width:44px;color:#fff;font-size:14px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+}
+@media (max-width:760px){
+  .hero{padding:48px 5vw 64px}
+  .hero-stage{grid-template-columns:minmax(0,1fr);gap:0}
+  .hero-content{display:contents}
+  .hero .kicker{grid-row:1;margin-bottom:20px}
+  .hero .mega{grid-row:2;font-size:clamp(64px,15vw,96px)}
+  .hero-role{grid-row:3;margin:18px 0 28px}
+  .hero-photo{grid-row:4;width:min(86%,340px);margin:0 4px 36px 0}
+  .hero-copy{grid-row:5}
+  .portrait-status{top:24px;right:0}
+  .timezone{display:none}
+  .tiles{grid-template-columns:1fr 1fr}
+  .scards{grid-template-columns:1fr}
+  .scard:nth-child(2),.scard:nth-child(4){margin-top:0}
+  .mega{font-size:clamp(48px,15.5vw,110px)}
+  .split{font-size:clamp(38px,11vw,86px)}
+}
+@media (max-width:560px){
+  .topbar{gap:12px}
+  .bar-right{gap:12px}
+  .social-label{width:100%}
+  .tiles{grid-template-columns:1fr}
+  .tile{min-height:124px}
+  .hire{display:none}
+}
+
+
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .reveal{opacity:1;transform:none}
+  #progress{display:none}
+  .type-word{display:none}
+  .type-word:first-child{display:block;visibility:visible;width:auto;border:0}
+}
+
+</style>
+</head>
+<body>
+
+<div id="progress" aria-hidden="true"></div>
+
+
+<header class="topbar" id="topbar">
+  <a class="brand" href="#home">Khalil Shaikh<sup>®</sup></a>
+  <nav class="links" aria-label="Main navigation">
+    <a href="#home">Home</a>
+    <a href="#about">About</a>
+    <a href="#skills">Skills</a>
+    <a href="#projects">Projects</a>
+    <a href="#contact">Contact</a>
+  </nav>
+  <div class="bar-right">
+    <span class="timezone mono">IST · UTC+5:30</span>
+    <a class="hire" href="#contact">Hire Me <span class="sq sm">↗</span></a>
+    <details class="mobile-menu">
+      <summary class="menu-btn"><span class="menu-label">Menu</span><span class="close-label">Close</span></summary>
+      <nav class="mobile-links" aria-label="Mobile navigation">
+        <a href="#home">Home</a>
+        <a href="#about">About</a>
+        <a href="#skills">Skills</a>
+        <a href="#projects">Projects</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </details>
+  </div>
+</header>
+
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="spark" viewBox="0 0 24 24">
+      <path d="M12 0l2.2 9.8L24 12l-9.8 2.2L12 24l-2.2-9.8L0 12l9.8-2.2z"/>
+    </symbol>
+    <symbol id="icon-instagram" viewBox="0 0 24 24">
+      <g fill="none" stroke="currentColor" stroke-width="1.8">
+        <rect x="3" y="3" width="18" height="18" rx="5"/>
+        <circle cx="12" cy="12" r="4"/>
+      </g>
+      <circle cx="17.5" cy="6.5" r="1.2" fill="currentColor"/>
+    </symbol>
+    <symbol id="icon-github" viewBox="0 0 24 24">
+      <path fill="currentColor" d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.56v-2.14c-3.2.7-3.88-1.36-3.88-1.36-.52-1.33-1.28-1.69-1.28-1.69-1.05-.72.08-.71.08-.71 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.23-1.28-5.23-5.68 0-1.25.45-2.28 1.18-3.08-.12-.29-.51-1.46.11-3.04 0 0 .96-.31 3.16 1.18a11 11 0 0 1 5.75 0c2.2-1.49 3.15-1.18 3.15-1.18.63 1.58.24 2.75.12 3.04.73.8 1.18 1.83 1.18 3.08 0 4.41-2.69 5.38-5.25 5.67.41.36.78 1.06.78 2.13v3.18c0 .31.21.68.79.56A11.51 11.51 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5Z"/>
+    </symbol>
+    <symbol id="icon-linkedin" viewBox="0 0 24 24">
+      <path fill="currentColor" d="M20.45 2H3.55C2.69 2 2 2.68 2 3.52v16.96c0 .84.69 1.52 1.55 1.52h16.9c.86 0 1.55-.68 1.55-1.52V3.52c0-.84-.69-1.52-1.55-1.52ZM7.93 18.75H4.98V9.2h2.95v9.55ZM6.46 7.9a1.71 1.71 0 1 1 0-3.42 1.71 1.71 0 0 1 0 3.42Zm12.29 10.85H15.8V14.1c0-1.11-.02-2.54-1.55-2.54-1.55 0-1.79 1.21-1.79 2.46v4.73H9.51V9.2h2.83v1.3h.04c.39-.74 1.36-1.52 2.79-1.52 2.98 0 3.58 1.96 3.58 4.51v5.26Z"/>
+    </symbol>
+    <symbol id="icon-email" viewBox="0 0 24 24">
+      <g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="5" width="18" height="14" rx="2"/>
+        <path d="m3 7 9 6 9-6"/>
+      </g>
+    </symbol>
+  </defs>
+</svg>
+
+
+<section class="hero" id="home">
+  <div class="hero-stage">
+    <div class="hero-content">
+      <p class="kicker mono"><span class="bar"></span>FRESHER · AHMEDNAGAR, INDIA</p>
+      <h1 class="mega reveal"><span class="l1">KHALIL</span><span class="l2">SHAIKH<sup>®</sup></span></h1>
+      <p class="hero-role reveal">Web developer <span>· Python &amp; Flask</span></p>
+      <div class="hero-copy reveal" style="--d:.1s">
+        <p class="intro">Learner by day, creator by night ✨ — turning ideas into clean, working code.
+          Currently building <span class="mono type-wrap">
+            <span class="sr-only">web pages, flask apps, python scripts, linux tricks, and ai workflows</span>
+            <span class="type-words" aria-hidden="true">
+              <span class="type-word" style="--chars:9;--start:0s">web pages</span>
+              <span class="type-word" style="--chars:10;--start:4s">flask apps</span>
+              <span class="type-word" style="--chars:14;--start:8s">python scripts</span>
+              <span class="type-word" style="--chars:12;--start:12s">linux tricks</span>
+              <span class="type-word" style="--chars:12;--start:16s">ai workflows</span>
+            </span>
+          </span></p>
+        <ul class="chips mono">
+          <li>OPEN TO INTERNSHIPS</li>
+          <li>SCIENCE STREAM ’26</li>
+          <li>AHMEDNAGAR → THE WORLD</li>
+        </ul>
+        <div class="hero-actions">
+          <a class="btn-line" href="#projects"><span class="bar"></span>View Projects <span class="sq">↗</span></a>
+          <a class="btn-line" href="#contact">Let’s Talk <span class="sq">↗</span></a>
+        </div>
+        <nav class="social-links hero-socials" aria-label="Social profiles and email">
+          <span class="social-label mono">FIND ME ONLINE</span>
+          <a class="social-icon" href="https://www.instagram.com/_shaikhalil_201/" target="_blank" rel="noopener noreferrer" aria-label="Instagram" title="Instagram"><svg aria-hidden="true" focusable="false"><use href="#icon-instagram"/></svg></a>
+          <a class="social-icon" href="https://github.com/shaikhalil" target="_blank" rel="noopener noreferrer" aria-label="GitHub" title="GitHub"><svg aria-hidden="true" focusable="false"><use href="#icon-github"/></svg></a>
+          <a class="social-icon" href="https://www.linkedin.com/in/khalil-shaikh-13024a389/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" title="LinkedIn"><svg aria-hidden="true" focusable="false"><use href="#icon-linkedin"/></svg></a>
+          <a class="social-icon" href="mailto:khalilshaikh8909@gmail.com" aria-label="Email Khalil" title="Email"><svg aria-hidden="true" focusable="false"><use href="#icon-email"/></svg></a>
+        </nav>
+      </div>
+    </div>
+    <figure class="hero-photo reveal" style="--d:.15s">
+      <div class="portrait-frame"><img src="khalil-cut.png" width="955" height="1237" alt="Khalil Shaikh — illustrated portrait wearing glasses and a blue jacket"></div>
+      <span class="portrait-status mono">OPEN TO WORK</span>
+      <figcaption><strong>Khalil Shaikh</strong><span class="mono">Ahmednagar, India</span></figcaption>
+    </figure>
+  </div>
+</section>
+
+
+<div class="strip" aria-hidden="true">
+  <div class="strack">
+    <div class="sgrp">
+      <span>KHALIL SHAIKH®</span><svg class="spark"><use href="#spark"/></svg>
+      <span>HTML · CSS · PYTHON · FLASK</span><svg class="spark"><use href="#spark"/></svg>
+      <span>LINUX · GIT · GITHUB</span><svg class="spark"><use href="#spark"/></svg>
+      <span>PROJECTS BELOW</span><svg class="spark"><use href="#spark"/></svg>
+    </div>
+    <div class="sgrp" aria-hidden="true">
+      <span>KHALIL SHAIKH®</span><svg class="spark"><use href="#spark"/></svg>
+      <span>HTML · CSS · PYTHON · FLASK</span><svg class="spark"><use href="#spark"/></svg>
+      <span>LINUX · GIT · GITHUB</span><svg class="spark"><use href="#spark"/></svg>
+      <span>PROJECTS BELOW</span><svg class="spark"><use href="#spark"/></svg>
+    </div>
+  </div>
+</div>
+
+
+<section class="about" id="about">
+  <p class="kicker mono reveal"><span class="bar"></span>KHALIL®</p>
+  <h2 class="mega split reveal">ABOUT<span> ME.</span></h2>
+
+  <div class="about-grid">
+    <p class="lede reveal">
+      I’m a curious fresher from Ahmednagar, Maharashtra, learning to turn ideas into clean, working code.
+      Right now I’m enjoying the little things that make the web delightful — honest HTML, careful CSS,
+      handy Python and a growing comfort with the terminal. The plan is simple:
+      <b>keep building, keep shipping, keep smiling.</b>
+    </p>
+
+    <div class="tiles">
+      <div class="tile reveal" style="--d:.05s"><span class="tlabel mono">THE BASE</span><span class="tval">AHMEDNAGAR,<br >MAHARASHTRA — INDIA</span></div>
+      <div class="tile reveal" style="--d:.12s"><span class="tlabel mono">THE STATUS</span><span class="tval">OPEN TO<br >INTERNSHIPS &amp; COLLABS</span></div>
+      <div class="tile reveal" style="--d:.19s"><span class="tlabel mono">THE CURRENT</span><span class="tval">LEARNING<br >FLASK &amp; APIS</span></div>
+      <div class="tile reveal" style="--d:.26s"><span class="tlabel mono">THE PROMISE</span><span class="tval">SHIP SOME-<br >THING EVERY WEEK</span></div>
+    </div>
+  </div>
+</section>
+
+
+<section class="gallery">
+  <div class="gcards">
+    <div class="grp">
+      <figure class="gcard"><div class="gcover gc1"><span class="em">👋</span><code>print("Hello, World!")</code></div><figcaption class="mono">hello_world.py</figcaption></figure>
+      <figure class="gcard"><div class="gcover gc2"><span class="em">🐍</span><code>import this</code></div><figcaption class="mono">playground.py</figcaption></figure>
+      <figure class="gcard"><div class="gcover gc3"><span class="em">🧪</span><code>@app.route("/")</code></div><figcaption class="mono">first_api.py</figcaption></figure>
+      <figure class="gcard"><div class="gcover gc4"><span class="em">📚</span><code>O(log n)</code></div><figcaption class="mono">dsa_notes.pdf</figcaption></figure>
+      <figure class="gcard"><div class="gcover gc5"><span class="em">🐧</span><code>$ ls -la</code></div><figcaption class="mono">terminal.sh</figcaption></figure>
+      <figure class="gcard"><div class="gcover gc6"><span class="em">🔀</span><code>init → commit → push</code></div><figcaption class="mono">git_habit.log</figcaption></figure>
+      <figure class="gcard"><div class="gcover gc7"><span class="em">🤖</span><code>"act as my mentor…"</code></div><figcaption class="mono">prompts.md</figcaption></figure>
+    </div>
+    <div class="grp" aria-hidden="true">
+      <figure class="gcard"><div class="gcover gc1"><span class="em">👋</span><code>print("Hello, World!")</code></div><figcaption class="mono">hello_world.py</figcaption></figure>
+      <figure class="gcard"><div class="gcover gc2"><span class="em">🐍</span><code>import this</code></div><figcaption class="mono">playground.py</figcaption></figure>
+      <figure class="gcard"><div class="gcover gc3"><span class="em">🧪</span><code>@app.route("/")</code></div><figcaption class="mono">first_api.py</figcaption></figure>
+      <figure class="gcard"><div class="gcover gc4"><span class="em">📚</span><code>O(log n)</code></div><figcaption class="mono">dsa_notes.pdf</figcaption></figure>
+      <figure class="gcard"><div class="gcover gc5"><span class="em">🐧</span><code>$ ls -la</code></div><figcaption class="mono">terminal.sh</figcaption></figure>
+      <figure class="gcard"><div class="gcover gc6"><span class="em">🔀</span><code>init → commit → push</code></div><figcaption class="mono">git_habit.log</figcaption></figure>
+      <figure class="gcard"><div class="gcover gc7"><span class="em">🤖</span><code>"act as my mentor…"</code></div><figcaption class="mono">prompts.md</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+
+<section class="skills" id="skills">
+  <p class="kicker mono reveal"><span class="bar"></span>WHAT I CAN DO — FRESHER EDITION</p>
+  <h2 class="split reveal">SKILLS THAT<span> WORK.</span></h2>
+
+  <div class="scards">
+    <article class="scard reveal" style="--d:.05s">
+      <svg class="spark"><use href="#spark"/></svg>
+      <h3>WEB<br >BASICS</h3>
+      <p>Structured HTML &amp; careful CSS — pages like this one, built by hand.</p>
+    </article>
+    <article class="scard reveal" style="--d:.12s">
+      <svg class="spark r"><use href="#spark"/></svg>
+      <h3>PYTHON<br >&amp; DSA</h3>
+      <p>Clean scripts, honest data structures &amp; tight, readable logic.</p>
+    </article>
+    <article class="scard reveal" style="--d:.19s">
+      <svg class="spark"><use href="#spark"/></svg>
+      <h3>LINUX<br >&amp; GITHUB</h3>
+      <p>Comfortable on the terminal, tidy with commits and branches.</p>
+    </article>
+    <article class="scard reveal" style="--d:.26s">
+      <svg class="spark r"><use href="#spark"/></svg>
+      <h3>AI<br >WORKFLOW</h3>
+      <p>ChatGPT &amp; AI tools for research, debugging and ideas — with a human double-check.</p>
+    </article>
+  </div>
+</section>
+
+
+<section class="tracks">
+  <div class="trackrow reveal">
+    <div class="tr-left">
+      <span class="idx mono"><svg class="spark sm"><use href="#spark"/></svg>001</span>
+      <h3>HTML &amp; CSS</h3>
+    </div>
+    <div class="tr-right">
+      <p>Semantic pages that load fast and read well — this very site is proof.</p>
+      <div class="tags mono"><span>HTML5</span><span>CSS3</span><span>RESPONSIVE</span></div>
+    </div>
+    <a class="go mono" href="#projects">SEE PROJECTS <span>↗</span></a>
+  </div>
+  <div class="trackrow reveal" style="--d:.06s">
+    <div class="tr-left">
+      <span class="idx mono"><svg class="spark sm"><use href="#spark"/></svg>002</span>
+      <h3>PYTHON &amp; DSA</h3>
+    </div>
+    <div class="tr-right">
+      <p>Day-to-day scripting and problem solving, with data structures that actually stay in memory.</p>
+      <div class="tags mono"><span>PYTHON 3</span><span>ARRAYS</span><span>BIG-O</span></div>
+    </div>
+    <a class="go mono" href="#projects">SEE PROJECTS <span>↗</span></a>
+  </div>
+  <div class="trackrow reveal" style="--d:.12s">
+    <div class="tr-left">
+      <span class="idx mono"><svg class="spark sm"><use href="#spark"/></svg>003</span>
+      <h3>FLASK &amp; APIS</h3>
+    </div>
+    <div class="tr-right">
+      <p>Small, honest back-ends — routes, JSON, templates. Currently my favourite rabbit hole.</p>
+      <div class="tags mono"><span>FLASK 3</span><span>JSON</span><span>ROUTING</span></div>
+    </div>
+    <a class="go mono" href="#projects">SEE PROJECTS <span>↗</span></a>
+  </div>
+  <div class="trackrow reveal" style="--d:.18s">
+    <div class="tr-left">
+      <span class="idx mono"><svg class="spark sm"><use href="#spark"/></svg>004</span>
+      <h3>LINUX &amp; GITHUB</h3>
+    </div>
+    <div class="tr-right">
+      <p>Flatpak-free zone. Comfortable on the shell, disciplined on commits, visible on GitHub.</p>
+      <div class="tags mono"><span>TERMINAL</span><span>GIT</span><span>GITHUB</span></div>
+    </div>
+    <a class="go mono" href="#projects">SEE PROJECTS <span>↗</span></a>
+  </div>
+</section>
+
+
+<section class="projects" id="projects">
+  <h2 class="mega-cut reveal">SELECTED<br ><span>PROJECTS</span></h2>
+
+  <div class="pgrid">
+    <article class="pcard reveal">
+      <div class="ptop"><span class="idx mono"><svg class="spark sm"><use href="#spark"/></svg>001</span><span class="pill-s mono">MACHINE LEARNING</span></div>
+      <h3>STOCK PRICE<br >PREDICTION</h3>
+      <p>A Python app that trains a PyTorch LSTM on historical stock prices from Yahoo Finance or uploaded CSV data. Generates forecasts, compares predictions with actual prices, and visualizes model performance through charts.</p>
+      <div class="tags mono"><span>PYTHON</span><span>PYTORCH</span><span>LSTM</span></div>
+      <a class="go mono" href="https://github.com/shaikhalil/stock-price-prediction" target="_blank" rel="noopener noreferrer">VIEW PROJECT <span>↗</span></a>
+    </article>
+
+    <article class="pcard reveal" style="--d:.06s">
+      <div class="ptop"><span class="idx mono"><svg class="spark sm"><use href="#spark"/></svg>002</span><span class="pill-s mono">SYSTEM DESIGN</span></div>
+      <h3>KRUSHICONNECT</h3>
+      <p>A farmer-to-buyer produce marketplace app, designed end to end and documented with a full set of UML diagrams — class, use case, sequence, deployment and more.</p>
+      <div class="tags mono"><span>UML</span><span>SYSTEM DESIGN</span><span>MARKETPLACE</span></div>
+      <a class="go mono" href="#">VIEW PROJECT <span>↗</span></a>
+    </article>
+
+    <article class="pcard pwide reveal" style="--d:.12s">
+      <div class="ptop"><span class="idx mono"><svg class="spark sm"><use href="#spark"/></svg>003</span><span class="pill-s mono">YOU ARE HERE</span></div>
+      <h3>THIS PORTFOLIO</h3>
+      <p>Hand-built with only HTML and CSS — no frameworks. A cutout portrait layered over the name, a palette lifted from the poster, CSS animations, and a responsive navigation menu.</p>
+      <div class="tags mono"><span>HTML5</span><span>CSS3</span><span>RESPONSIVE</span></div>
+      <a class="go mono" href="#home">BACK TO TOP <span>↗</span></a>
+    </article>
+  </div>
+</section>
+
+
+<section class="contact" id="contact">
+  <h2 class="mega split reveal">GET IN<span> TOUCH.</span></h2>
+  <a class="btn-line reveal" style="--d:.1s" href="mailto:khalilshaikh8909@gmail.com"><span class="bar"></span>Say Hello <span class="sq">↗</span></a>
+
+  <div class="tiles c-tiles">
+    <div class="tile reveal" style="--d:.05s"><span class="tlabel mono">THE LOCATION</span><span class="tval">AHMEDNAGAR,<br >MAHARASHTRA — INDIA</span></div>
+    <div class="tile reveal" style="--d:.12s"><span class="tlabel mono">THE HOURS</span><span class="tval">DAILY: 10 AM — 11 PM IST</span></div>
+    <div class="tile reveal" style="--d:.19s"><span class="tlabel mono">THE MAIL</span><span class="tval email"><a href="mailto:khalilshaikh8909@gmail.com" class="tlink">khalilshaikh8909@<br >gmail.com</a></span></div>
+    <div class="tile reveal" style="--d:.26s"><span class="tlabel mono">THE SOCIALS</span><span class="tval social-links">
+      <a href="https://github.com/shaikhalil" class="tlink social-text" target="_blank" rel="noopener noreferrer"><svg aria-hidden="true" focusable="false"><use href="#icon-github"/></svg>GITHUB</a>
+      <a href="https://www.instagram.com/_shaikhalil_201/" class="tlink social-text" target="_blank" rel="noopener noreferrer"><svg aria-hidden="true" focusable="false"><use href="#icon-instagram"/></svg>INSTAGRAM</a>
+      <a href="https://www.linkedin.com/in/khalil-shaikh-13024a389/" class="tlink social-text" target="_blank" rel="noopener noreferrer"><svg aria-hidden="true" focusable="false"><use href="#icon-linkedin"/></svg>LINKEDIN</a>
+    </span></div>
+  </div>
+</section>
+
+
+<footer class="foot">
+  <div class="band">
+    <span class="pill mono reveal">HONORS &amp; AWARDS — SOON™</span>
+    <div class="foot-name reveal">KHALIL SHAIKH<sup>®</sup></div>
+  </div>
+  <div class="foot-links mono">
+    <div class="flinks">
+      <a href="#home">HOME</a><a href="#about">ABOUT</a><a href="#skills">SKILLS</a><a href="#projects">PROJECTS</a><a href="#contact">CONTACT</a>
+    </div>
+    <div class="fnote">HANDCRAFTED WITH HTML &amp; CSS — AHMEDNAGAR, INDIA 🇮🇳</div>
+    <div class="fcopy">©2026 KHALIL SHAIKH · ALL RIGHTS RESERVED</div>
+  </div>
+</footer>
+
+</body>
+</html>
